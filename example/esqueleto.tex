@@ -1,0 +1,285 @@
+\documentclass[12pt,spanish,oneside]{book}
+\usepackage[Algoritmo]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage[utf8]{inputenc}
+\usepackage{pgf,tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows}
+\usepackage{mathrsfs}
+\usepackage[spanish,mexico]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathptmx}
+\pgfplotsset{compat=1.8}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[Sonny]{fncychap} %Sonny, Lenny, Glenn, Conny, Rejne and Bjarne
+\usepackage{booktabs}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{dsfont}
+\usepackage{float}
+\theoremstyle{plain}
+\newtheorem{teo}{Teorema}[chapter]
+\newtheorem{lema}[teo]{Lema}
+\newtheorem{prop}[teo]{Proposici\'{o}n}
+\newtheorem{algo}[teo]{Algoritmo}
+\newtheorem*{cor}{Corolario}
+\numberwithin{equation}{chapter}
+\theoremstyle{definition}
+\usepackage[numbered]{mcode}
+\newtheorem{defi}{Definici\'{o}n}[chapter]
+\newtheorem{ej}{Ejemplo}[chapter]
+\parindent=0in
+\theoremstyle{remark}
+\newtheorem*{obs}{Observaci\'{o}n}
+\newcommand{\re}{\mathbb{R}}
+\newcommand{\parc}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\nat}{\mathbb{N}}
+\newcommand{\LD}{\mathcal{L}^2}
+\newcommand{\cz}{C_{\scriptscriptstyle{0}}^{\scriptscriptstyle{\infty}}}
+\newcommand{\ci}{C^{\scriptscriptstyle{\infty}}}
+\newcommand{\icu}{\int_0^1}
+\newcommand{\hu}{H^1}
+\newcommand{\hcu}{H_0^1}
+\newcommand{\intinf}{\int_{-\infty}^{\infty}}
+\newcommand{\dxy}{\hspace{5pt} dx\hspace{2pt} dy }
+\newcommand{\ds}{\hspace{5pt} ds}
+\newcommand{\dx}{\hspace{5pt} dx}
+\newcommand{\dxhat}{\hspace{5pt} d\hat{x}_1d\hat{x}_2}
+\newcommand{\dxt}{\hspace{5pt} dx_1dx_2}
+\newcommand{\intomega}[1]{\iint_\Omega #1 \dxy} %% Para integrar sobre omega, sólo le pones lo que va dentro
+\newcommand{\llaves}[1]{\left\lbrace #1\right\rbrace}
+\parskip=10pt
+\author{Miguel Angel Escalante Serrato}
+\title{Revisión e implementación del método de elementos finitos.}
+\begin{document}
+\definecolor{zzttqq}{rgb}{0,0.4,0.2}
+\definecolor{qqqqff}{rgb}{0,0.4,0.2}
+\definecolor{ccqqqq}{rgb}{0.8,0,0}
+\definecolor{qqwwtt}{rgb}{0,0.4,0.2}
+\definecolor{qqtttt}{rgb}{0,0.2,0.2}
+\definecolor{mycolor1}{rgb}{0,0.4,0.2}%
+\newpage
+
+\thispagestyle{empty}
+
+\setcounter{page}{1}
+\begin{center}
+\begin{tabular}{c}
+\hline
+ \large \emph{\textsc{Instituto Tecnológico Autónomo de México}} \\
+ 
+\hline
+\end{tabular}
+
+\vspace{10pt}
+
+\centering
+\includegraphics[width=0.8\linewidth]{Logo_ITAM.jpeg}
+
+\vspace{20pt}
+
+
+\Large Revisión e implementación del método de elementos finitos.
+
+
+
+\vspace{30pt}
+
+\normalsize TESIS
+
+\vspace{12pt}
+
+que para obtener el título de
+
+\vspace{12pt}
+
+Licenciado en Matemáticas Aplicadas
+
+\vspace{12pt}
+
+presenta
+
+\vspace{12pt}
+
+Miguel Angel Escalante Serrato
+
+\vspace{32pt}
+
+\begin{tabular}{lcr}
+MÉXICO, D.F. & \hspace{80pt} & 2013
+\end{tabular}
+
+\textbf{Asesor:} Juan Carlos Aguilar Villegas
+
+\textbf{Revisor:} José Luis Farah Ibáñez
+\end{center}
+
+
+\newpage
+\setcounter{page}{1}
+\pagenumbering{roman}
+\mbox{ }
+\vspace{80pt}
+\mbox{ }
+
+Con fundamento en los artículos 21 y 27 de la Ley Federal del Derecho de Autor y como titular de los derechos moral y patrimonial de la obtra titulada ``\textbf{Revisión e implementación del método de elementos finitos.}'', otorgo de manera gratuita y permanente al Instituto Tecnológico Autónomo de México y a la Biblioteca Raúl Bailléres Jr., autorización para que fijen la obra en cualquier medio, incluido el electrónico, y la divulguen entre sus usuarios, profesores, estudiantes o terceras personas, sin que pueda percibir por tal divulgación una contraprestación.
+\vspace{20pt}
+\begin{center}
+\textbf{Miguel Angel Escalante Serrato}
+\vspace{80pt}
+
+\begin{tabular}{p{2cm}cp{2cm}}
+
+\hline \\
+ 
+
+&Fecha & \\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\hline \\
+
+ & Firma & 
+
+\end{tabular}
+\end{center}
+
+
+
+\newpage
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace{40pt}
+\[\]
+\[\]
+\[\]
+\begin{tabular}{c}
+\hline
+ \\[.2cm]
+\Huge
+\textbf{Revisión e implementación del }\\ 
+\Huge\textbf{método de elementos finitos }\\[14pt]
+\normalsize
+Miguel Angel Escalante Serrato \\[.2cm]
+
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\newpage
+\vspace*{\fill}
+\begin{flushright}
+Dedicatoria
+\vfill
+\end{flushright}
+\newpage
+\mbox{ }
+\vspace{80pt}
+\begin{flushright}
+\textsc{\large Agradecimientos} \\
+\vspace{12pt}
+
+...
+\end{flushright}
+
+\chapter*{Prefacio}
+
+Un problema bastante común en diversas áreas científicas es el de resolver ecuaciones diferenciales parciales, es un problema tanto interesante como relevante ya que es muy usado, por ejemplo, en diversas áreas para modelar la reacción de distintos materiales a diversas condiciones y situaciones. Existen diversos métodos para resolver este tipo de ecuaciones; dependiendo del problema se debe de analizar qué herramienta es la más adecuada para el trabajo. Aquellos problemas en donde una malla no es lo suficientemente robusta para describir el dominio, es el tipo de problemas en los que el método de los elementos finitos se especializa. En particular en esta tesis se implementa un método para resolver un subconjunto de la amplia familia de ecuaciones diferenciales parciales, las elípticas. Es un trabajo que nace de la curiosidad de lo que hay más allá de la solución exacta en pizarrón o papel y lápiz; ¿qué pasa cuando el papel y el lápiz no pueden resolver el problema? ¿Qué pasa cuando se tiene que usar el poder de cómputo? Con la guía y apoyo de mi asesor fui respondiendo estas preguntas para este problema y espero sirva para que el lector encuentre una vela para buscar el camino a la respuesta que busca. 
+
+\frontmatter
+
+
+\tableofcontents
+
+\mainmatter
+\chapter{Introducción}
+
+\chapter{Conceptos} 
+
+\section{Espacios de Hilbert}
+
+\section{Integración por partes}
+
+\section{Derivada débil de funciones en $\LD(I)$}
+
+\section{Derivada débil en $\LD(\Omega)$}
+
+
+\section{Formulación variacional}
+
+\section{Ejemplos}
+
+\chapter{Método de elementos finitos}
+\section{Representación de funciones}
+
+\section{Nodos}\label{CapNodos}
+
+
+\section{Funciones nodales}\label{Sfn}
+
+\section{Triangulación} \label{Triangulacion}
+
+\section{Construcción del sistema de ecuaciones}
+\section{Manejo de datos}
+
+
+\section{Número de condición de la matriz $A$.}
+\section{Cuadraturas y cálculo de integrales.}
+
+
+\section{Resolución del sistema de ecuaciones: gradiente conjugado}
+
+\section{Error de aproximación}
+
+\chapter{Dimensión 1}
+
+\section{Ecuaciones diferenciales no lineales.}
+
+
+\subsection{Método de Newton} 
+
+
+\chapter{Resultados numéricos}
+
+
+
+\chapter{Conclusiones}
+
+\appendix
+\chapter{Algoritmo de Delaunay}\label{DelaunayApendice}
+
+\chapter{Método del gradiente conjugado.}\label{AN1}
+
+\chapter{Prueba del lema 3.1 }\label{AN2}
+\chapter{Código}
+\section{Main}
+
+\section{Triangulo.m}
+
+\section{Vecinos.m}
+
+\section{Constru.m}
+
+\section{gradp.m}
+\section{area.m}
+
+\section{gradconj.m}
+
+\backmatter
+\bibliographystyle{plain}
+\bibliography{bib}
+
+\end{document}	
